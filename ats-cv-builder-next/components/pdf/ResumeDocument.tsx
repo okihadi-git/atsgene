@@ -2,6 +2,20 @@ import React from "react";
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import type { Resume, Settings } from "@/lib/types";
 import { lines } from "@/lib/ats";
+import { Font, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+
+// Registrasi Font eksternal agar tidak fallback ke Times New Roman
+Font.register({
+  family: 'Open Sans',
+  src: 'https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFVZ0e.ttf',
+});
+
+const styles = StyleSheet.create({
+  page: {
+    fontFamily: 'Open Sans',
+    padding: 30,
+  },
+});
 
 export function ResumeDocument({ r, s }: { r: Resume; s: Settings }) {
   const serif = s.tpl === "classic", cmp = s.tpl === "compact", mod = s.tpl === "modern";
