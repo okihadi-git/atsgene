@@ -30,5 +30,6 @@ export default function App() {
         {tab === "edit" ? <Editor /> : tab === "design" ? <DesignPanel /> : <AtsPanel />}
       </section>
       <section className="lg:sticky lg:top-3 lg:h-[calc(100vh-24px)]"><Preview /></section>
+      <Preview resume={S} settings={S} />
     </main></>);
 }
