@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ATS CV Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e8eef0;--card:#fff;--line:#d3dde1;--ink:#10212b;--mut:#587080;--pri:#0b7a75;--soft:#e2f3f1;--ok:#0b7a4b;--okb:#d6f2e4;--bad:#c0392b;--pbt:#fff;--hd:#0c2f36;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1418;--card:#112027;--line:#223a44;--ink:#e3eef1;--mut:#8fa9b4;--pri:#3dc4bb;--soft:#123037;--okb:#0f3a2c;--pbt:#06201f;--hd:#071e24;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a1418;--card:#112027;--line:#223a44;--ink:#e3eef1;--mut:#8fa9b4;--pri:#3dc4bb;--soft:#123037;--okb:#0f3a2c;--pbt:#06201f;--hd:#071e24;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.5 'Hanken Grotesk',system-ui,sans-serif}
+.top{display:flex;align-items:center;gap:12px;padding:14px 24px;background:var(--hd);color:#fff}
+.logo{width:36px;height:36px;border-radius:50% 50% 50% 4px;background:#fff;color:var(--hd);display:grid;place-items:center;font-weight:700;font-size:12px}
+.top h1{font:700 19px 'Bricolage Grotesque',sans-serif;margin:0}.top small{color:#9ec5c2;font-size:12.5px}
+.sp{flex:1}.top button{background:transparent;color:#fff;border-color:#ffffff45}.top .seg{border-color:#ffffff45}.top .seg .on{background:#fff;color:var(--hd)}.top .badge{background:#ffffff1f;color:#bdf3e2}
+.badge{background:var(--okb);color:var(--ok);border-radius:999px;padding:3px 10px;font-size:12px}
+button{font:inherit;color:var(--ink);cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--pri);outline-offset:1px}
+button.pri{background:var(--pri);border-color:var(--pri);color:var(--pbt);font-weight:600}
+button.g{border-color:transparent;background:transparent;color:var(--mut)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;padding:2px}
+.seg button{border:0;padding:4px 10px;background:transparent}.seg .on{background:var(--pri);color:var(--pbt)}
+main{display:grid;grid-template-columns:minmax(340px,570px) 1fr;gap:20px;padding:16px 20px 40px;max-width:1500px;margin:auto}
+@media(max-width:960px){main{grid-template-columns:1fr}}
+.tabs{display:flex;gap:24px;border-bottom:2px solid var(--line);margin-bottom:14px}
+.tabs button{border:0;border-radius:0;background:transparent;padding:8px 2px;margin-bottom:-2px;border-bottom:3px solid transparent;color:var(--mut);font-weight:600;font-size:15px}.tabs .on{background:transparent;color:var(--ink);border-bottom-color:var(--pri)}
+.acts{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--pri);border-radius:6px;margin-bottom:14px;overflow:hidden}
+.card>summary{padding:14px 16px;font:700 17px 'Bricolage Grotesque','Hanken Grotesk',sans-serif;cursor:pointer;list-style:none;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.card>summary::after{content:"\2013";color:var(--mut)}
+.card:not([open])>summary::after{content:"+"}
+.card:not([open])>summary{border-bottom:0}
+.bd{padding:14px 16px}
+.pad{padding:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.full{grid-column:1/-1}
+label{display:block;font-size:12.5px;color:var(--mut);margin-bottom:4px}
+input[type=text],input:not([type]),textarea{width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:8px 10px;font:inherit}
+textarea{min-height:90px;resize:vertical}
+.it{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
+.ith{display:flex;align-items:center;gap:2px;margin-bottom:8px;font-size:11.5px;color:var(--mut);font-weight:600;text-transform:uppercase}
+.ith button{padding:1px 7px;border:0;background:transparent;color:var(--mut)}
+.add{width:100%;border-style:dashed;color:var(--mut);background:transparent}
+.tpls{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tpl{text-align:left;padding:8px;border-radius:12px;position:relative}
+.tpl.on{border-color:var(--pri);background:var(--soft);box-shadow:0 0 0 1px var(--pri)}
+.th{height:110px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 8px;margin-bottom:8px}
+.th i{display:block;height:3px;background:#cbd5e1;margin:5px 0}.th i.h{background:var(--ac);width:60%}.th i.c{width:50%;margin:0 auto 8px;height:5px;background:#222}
+.tpl small{display:block;color:var(--mut);font-size:12px}.tag{display:inline-block;margin-top:6px;background:var(--okb);color:var(--ok);border-radius:999px;padding:1px 8px;font-size:11px}
+.sw{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sw button{width:28px;height:28px;border-radius:50%;padding:0;border:2px solid var(--card)}
+.sw button.on{box-shadow:0 0 0 2px var(--ink)}
+.rng{display:flex;gap:12px;align-items:center}.rng input{flex:1}
+.ring{width:110px;height:110px;position:relative;flex:none}.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:30px}
+.sc{display:flex;gap:20px;align-items:center}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin:4px 0 10px}.bar i{display:block;height:100%;background:var(--ok)}
+.bl{display:flex;justify-content:space-between;font-size:12.5px}
+.ck{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;list-style:none;margin:0;padding:0;font-size:13px}
+@media(max-width:560px){.ck,.g2,.tpls{grid-template-columns:1fr}}
+.ck li::before{content:"\2713";display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--okb);color:var(--ok);margin-right:8px;font-size:11px}
+.ck li.x::before{content:"\00D7";background:#fee2e2;color:var(--bad)}
+.kw{display:inline-block;border-radius:6px;padding:1px 8px;font-size:12px;margin:0 4px 4px 0;background:var(--okb);color:var(--ok)}.kw.x{background:#fee2e2;color:var(--bad)}
+.sticky{position:sticky;top:8px;align-self:start}
+.tl{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px;align-items:center}
+.stage{overflow:hidden;border-radius:6px;background:#9fb3ba}
+#paper{width:794px;min-height:1123px;background:#fff;color:#111;padding:44px 54px;transform-origin:top left;line-height:1.35;--a:#0b7a75;box-shadow:0 12px 32px #0007}
+#paper h1{margin:0;font-size:2em}#paper .t{margin-top:2px}
+#paper .c{font-size:.92em;margin:5px 0 2px}#paper .c span+span::before{content:" | ";color:#999}
+#paper h3{font-size:1em;margin:14px 0 5px;padding-bottom:2px}
+#paper ul{margin:2px 0 6px;padding-left:18px}#paper li{margin:0}
+#paper .r{display:flex;justify-content:space-between;gap:12px}
+#paper .i{font-style:italic;font-size:.95em}#paper .d{color:var(--a)}
+#paper.classic{font-family:Georgia,'Times New Roman',serif}
+#paper.classic h1,#paper.classic .t,#paper.classic .c{text-align:center}
+#paper.classic h3{text-transform:uppercase;border-bottom:1px solid #111}
+#paper.modern{font-family:Arial,Helvetica,sans-serif}
+#paper.modern h1,#paper.modern .t{color:var(--a)}
+#paper.modern h3{text-transform:uppercase;color:var(--a);border-bottom:1px solid var(--a)}
+#paper.compact{font-family:Arial,Helvetica,sans-serif;line-height:1.25;padding:36px 46px}
+#paper.compact h1,#paper.compact .t,#paper.compact .c{text-align:center}
+#paper.compact h3{color:var(--a);border-bottom:1px solid #d4d4d8;margin-top:9px}
+.pv{font-size:12.5px;color:var(--mut);margin:0 0 8px}
+.note{margin-top:12px;font-size:12.5px;color:var(--mut);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+dialog{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;width:min(720px,92vw)}
+dialog textarea{min-height:300px;font-family:ui-monospace,monospace;font-size:12px}dialog::backdrop{background:#0008}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--card);padding:8px 14px;border-radius:9px;opacity:0;pointer-events:none;transition:opacity .2s}
+@media print{@page{margin:0}body{background:#fff}.np{display:none!important}main{display:block;padding:0}.sticky{position:static}.stage{height:auto!important;background:#fff}#paper{transform:none!important;margin:0!important;box-shadow:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div><dialog id="dlg"></dialog><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s);
+const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const lines=t=>String(t||'').split('\n').map(x=>x.trim()).filter(Boolean);
+const BLANK=()=>({name:'',title:'',email:'',phone:'',loc:'',li:'',gh:'',web:'',summary:'',exp:[{}],edu:[{}],proj:[{}],skills:[{}],ach:[{}],cert:[{}],lang:[{}],tpl:'classic',acc:'#0b7a75',fs:100,jd:'',L:'id',tab:'edit',dark:matchMedia('(prefers-color-scheme: dark)').matches});
+const SAMPLE={name:'Budi Santoso',title:'Data Analyst',email:'budi.santoso@email.com',phone:'+62 812-3456-7890',loc:'Jakarta, Indonesia',li:'linkedin.com/in/budisantoso',gh:'github.com/budisantoso',web:'budisantoso.dev',
+summary:'Data Analyst with 3+ years turning messy data into clear decisions. Skilled in SQL, Python, and dashboarding, with a track record of cutting reporting time and surfacing revenue opportunities. Comfortable partnering with product, finance, and operations teams.',
+exp:[{role:'Data Analyst',org:'Tokopedia',loc:'Jakarta',dates:'Jan 2022 -- Present',bullets:'Built 12+ automated dashboards in Looker, reducing weekly reporting time by 70%.\nDesigned an SQL anomaly-detection pipeline that flagged Rp 2.1B in mispriced SKUs.\nPartnered with product to run 8 A/B tests, lifting checkout conversion by 4.3%.'},{role:'Junior Data Analyst',org:'Bukalapak',loc:'Jakarta',dates:'2021 -- 2022',bullets:'Cleaned and modeled 5M+ row datasets for the marketing team.\nAutomated monthly KPI reports with Python and Google Sheets API.'}],
+edu:[{deg:'B.Sc. in Computer Science',school:'Universitas Indonesia',loc:'Depok, Indonesia',dates:'2017 -- 2021',gpa:'3.78 / 4.00',detail:''}],
+proj:[{name:'House Price Prediction',year:'2023',tech:'Python, Scikit-Learn, Streamlit',link:'',desc:'Trained a gradient-boosting model reaching 0.91 R^2 on 20k listings.\nShipped an interactive Streamlit demo used by 300+ visitors.'}],
+skills:[{cat:'Languages',list:'Python, SQL, R, JavaScript'},{cat:'Data & BI',list:'Pandas, NumPy, Looker, Tableau, dbt'},{cat:'Other',list:'Git, Airflow, A/B Testing, Statistics'}],
+ach:[{v:'1st Place -- National Data Hackathon 2023'},{v:'Top 5% -- Kaggle Tabular Playground (2022)'}],cert:[{v:'Google Data Analytics Professional Certificate'},{v:'AWS Certified Cloud Practitioner'}],lang:[{v:'Indonesian -- Native'},{v:'English -- Professional (IELTS 7.5)'}]};
+let S=load();
+function load(){try{const r=localStorage.getItem('atscv-v2');if(r){const o=Object.assign(BLANK(),JSON.parse(r));if(o.acc==='#2447f5')o.acc='#0b7a75';return o}}catch(e){}return BLANK()}
+function save(){try{localStorage.setItem('atscv-v2',JSON.stringify(S))}catch(e){}}
+const t=(a,b)=>S.L==='id'?a:b;
+const BASIC=[['name','Nama lengkap','Full name','Budi Santoso'],['title','Posisi yang dilamar','Target role','Data Analyst'],['email','Email','Email','budi@email.com'],['phone','Telepon','Phone','+62 812-3456-7890'],['loc','Lokasi','Location','Jakarta, Indonesia'],['li','URL LinkedIn','LinkedIn URL','linkedin.com/in/budi'],['gh','URL GitHub','GitHub URL','github.com/budi'],['web','Portfolio / website','Portfolio / website','budi.dev']];
+const LISTS={
+exp:{h:['Pengalaman kerja','Work experience'],f:[['role','Jabatan','Job title','Junior Developer'],['org','Perusahaan','Company','Tokopedia'],['loc','Lokasi','Location','Jakarta'],['dates','Periode','Period','Jan 2023 -- Present'],['bullets','Tanggung jawab & dampak (satu poin per baris)','Responsibilities & impact (one per line)','Built X that improved Y by Z%','ta']]},
+edu:{h:['Pendidikan','Education'],f:[['deg','Gelar / jurusan','Degree / major'],['school','Institusi','Institution'],['loc','Lokasi','Location'],['dates','Periode','Period'],['gpa','IPK (opsional)','GPA (optional)'],['detail','Detail (satu per baris, opsional)','Details (one per line, optional)','Relevant coursework, thesis, honors...','ta']]},
+proj:{h:['Proyek','Projects'],f:[['name','Nama proyek','Project name'],['year','Tahun','Year'],['tech','Teknologi','Technologies'],['link','Tautan (opsional)','Link (optional)'],['desc','Deskripsi (satu poin per baris)','Description (one per line)','','ta']]},
+skills:{h:['Keahlian','Skills'],f:[['cat','Kategori (opsional)','Category (optional)'],['list','Keahlian (pisahkan dengan koma)','Skills (comma-separated)']]},
+ach:{h:['Prestasi','Achievements'],f:[['v','Prestasi','Achievement']]},
+cert:{h:['Sertifikasi','Certifications'],f:[['v','Sertifikat atau penghargaan','Certificate or award']]},
+lang:{h:['Bahasa','Languages'],f:[['v','Bahasa & tingkat','Language & level']]}};
+const ACC=['#0b7a75','#334155','#047857','#7c3aed','#be123c','#b45309','#111111'];
+const TPL=[['classic','Classic',['Serif, single-column, Overleaf-style. The safest ATS choice.','Serif, satu kolom, gaya Overleaf. Pilihan paling aman untuk ATS.']],['modern','Modern',['Sans-serif with a colored accent header and clean rules.','Sans-serif dengan header aksen berwarna dan garis bersih.']],['compact','Compact',['Tighter spacing to fit more content on a single page.','Spasi lebih rapat agar muat lebih banyak di satu halaman.']]];
+
+function fld(attr,f,val){const ta=f[4];const ph=E(f[3]||'');return `<div class="${ta?'full':''}"><label>${E(t(f[1],f[2]))}</label>${ta?`<textarea ${attr} placeholder="${ph}">${E(val)}</textarea>`:`<input ${attr} placeholder="${ph}" value="${E(val)}">`}</div>`}
+function listCard(k){const c=LISTS[k],h=t(...c.h),a=S[k];
+ return `<details class="card" open><summary>${h}</summary><div class="bd">${a.map((x,i)=>`<div class="it"><div class="ith"><span>${h} #${i+1}</span><span class="sp"></span><button class="g" data-mv="${k}" data-i="${i}" data-d="-1" ${i?'':'disabled'} aria-label="Up">&uarr;</button><button class="g" data-mv="${k}" data-i="${i}" data-d="1" ${i<a.length-1?'':'disabled'} aria-label="Down">&darr;</button><button class="g" data-del="${k}" data-i="${i}" aria-label="Delete">&#10005;</button></div><div class="g2">${c.f.map(f=>fld(`data-l="${k}" data-i="${i}" data-f="${f[0]}"`,f,x[f[0]]||'')).join('')}</div></div>`).join('')}<button class="add" data-add="${k}">+ ${t('Tambah','Add')} ${h}</button></div></details>`}
+function panel(){
+ if(S.tab==='edit')return `<details class="card" open><summary>${t('Informasi dasar','Basic information')}</summary><div class="bd g2">${BASIC.map(f=>fld(`data-k="${f[0]}"`,f,S[f[0]])).join('')}</div></details>
+ <details class="card" open><summary>${t('Ringkasan profesional','Professional summary')}</summary><div class="bd">${fld('data-k="summary"',['summary','Ringkasan','Summary','2-3 sentences highlighting your strengths for the target role...','ta'],S.summary)}</div></details>`+Object.keys(LISTS).map(listCard).join('');
+ if(S.tab==='design')return `<div class="card pad"><b>Template</b><div class="tpls" style="margin-top:10px">${TPL.map(x=>`<button class="tpl ${S.tpl===x[0]?'on':''}" data-tpl="${x[0]}" style="--ac:${S.acc}"><div class="th">${x[0]==='classic'?'<i class="c"></i>':'<i class="h"></i>'}<i></i><i class="h"></i><i></i><i></i><i class="h"></i><i></i><i></i></div><b>${x[1]}</b><small>${t(x[2][1],x[2][0])}</small><span class="tag">${t('Aman ATS','ATS-safe')}</span></button>`).join('')}</div></div>
+ <div class="card pad"><b>${t('Warna aksen','Accent color')}</b><div class="sw" style="margin-top:10px">${ACC.map(c=>`<button data-acc="${c}" class="${S.acc===c?'on':''}" style="background:${c}" aria-label="${c}"></button>`).join('')}<input type="color" id="cc" value="${S.acc}" aria-label="Custom color" style="width:32px;height:30px;padding:0;border:0;background:none"></div></div>
+ <div class="card pad"><b>${t('Ukuran font','Font size')}</b><div class="rng" style="margin-top:10px"><button data-fs="-5">&minus;</button><input type="range" id="fs" min="80" max="120" step="5" value="${S.fs}"><button data-fs="5">+</button></div><div style="text-align:center;color:var(--mut)" id="fsv">${S.fs}%</div></div>`;
+ return `<div class="card pad"><b>${t('Pemeriksa Skor ATS','ATS Score Checker')}</b><p style="color:var(--mut);margin:6px 0 12px">${t('Tempel deskripsi pekerjaan yang kamu incar. Kami bandingkan dengan CV-mu, sepenuhnya di browser, lalu menilai kecocokan kata kunci dan kesehatan format.','Paste the job description you are targeting. We compare it with your CV entirely in your browser and score keyword match and format health.')}</p><label>${t('Deskripsi pekerjaan','Job description')}</label><textarea id="jd" placeholder="${t('Tempel lowongan kerja lengkap di sini...','Paste the full job posting here...')}">${E(S.jd)}</textarea></div><div id="res"></div>`}
+function ui(){
+ document.documentElement.dataset.theme=S.dark?'dark':'light';document.documentElement.lang=S.L;
+ const tb=(k,l)=>`<button class="${S.tab===k?'on':''}" data-tab="${k}">${l}</button>`;
+ $('#root').innerHTML=`<div class="top np"><div class="logo">CV</div><div><h1>ATS CV Builder</h1><small>${t('Buat CV rapi yang ramah ATS dalam hitungan menit.','Build a clean, ATS-friendly CV in minutes.')}</small></div><span class="sp"></span><span class="badge" id="saved">&#10003; ${t('Tersimpan','Saved')}</span><button data-dark="1" aria-label="Theme">${S.dark?'&#9728;':'&#9790;'}</button><span class="seg"><button data-lang="id" class="${S.L==='id'?'on':''}">ID</button><button data-lang="en" class="${S.L==='en'?'on':''}">EN</button></span></div>
+ <main><section class="np"><div class="tabs">${tb('edit','Editor')}${tb('design',t('Desain','Design'))}${tb('ats',t('Cek ATS','ATS check'))}</div>
+ <div class="acts"><button data-act="sample">${t('Muat contoh','Load sample')}</button><button class="g" data-act="clear">${t('Hapus semua','Clear all')}</button><button class="g" data-act="imp">${t('Impor','Import')}</button><button class="g" data-act="exp">${t('Ekspor data','Export data')}</button></div>
+ <div id="panel">${panel()}</div></section>
+ <section class="sticky"><p class="pv np"><b style="color:var(--ink)">${t('Pratinjau langsung','Live preview')}</b> &middot; ${t('Berubah saat kamu mengetik','Updates as you type')}</p><div class="tl np"><button class="pri" data-act="pdf">${t('Unduh PDF','Download PDF')}</button></div><div class="stage" id="stage"><div id="paper"></div></div><div class="note np"><b>${t('Privasi','Privacy')}:</b> ${t('Semua berjalan di browser-mu. Datamu tidak pernah diunggah ke server, hanya tersimpan otomatis secara lokal agar pekerjaanmu tidak hilang.','Everything runs in your browser. Your data is never uploaded, only autosaved locally so your work is not lost.')}</div></section></main>`;
+ paint()}
+const sec=(h,b)=>b?`<h3>${h}</h3>${b}`:'';
+const ul=a=>a.length?`<ul>${a.map(b=>`<li>${E(b)}</li>`).join('')}</ul>`:'';
+const has=(a,k)=>a.some(x=>(x[k]||'').trim());
+function paperHTML(){
+ const c=[S.phone,S.email,S.loc,S.li,S.gh,S.web].filter(x=>x&&x.trim()).map(x=>`<span>${E(x)}</span>`).join('');
+ return `<h1>${E(S.name||'Your Name')}</h1>${S.title?`<div class="t">${E(S.title)}</div>`:''}<div class="c">${c}</div>`
+ +sec('Summary',S.summary.trim()?`<div>${E(S.summary)}</div>`:'')
+ +sec('Professional Experience',S.exp.filter(x=>x.role||x.org).map(x=>`<div class="r"><b>${E(x.role)}</b><span class="d">${E(x.dates)}</span></div><div class="r i"><span>${E(x.org)}</span><span>${E(x.loc)}</span></div>${ul(lines(x.bullets))}`).join(''))
+ +sec('Education',S.edu.filter(x=>x.deg||x.school).map(x=>`<div class="r"><b>${E(x.deg)}</b><span class="d">${E(x.dates)}</span></div><div class="r i"><span>${E(x.school)}${x.gpa?' | GPA: '+E(x.gpa):''}</span><span>${E(x.loc)}</span></div>${ul(lines(x.detail))}`).join(''))
+ +sec('Projects',S.proj.filter(x=>x.name).map(x=>`<div class="r"><span><b>${E(x.name)}</b>${x.tech?' | <i>'+E(x.tech)+'</i>':''}</span><span class="d">${E(x.year)}</span></div>${x.link?`<div class="i">${E(x.link)}</div>`:''}${ul(lines(x.desc))}`).join(''))
+ +sec('Technical Skills',S.skills.filter(x=>x.list).map(x=>`<div>${x.cat?'<b>'+E(x.cat)+':</b> ':''}${E(x.list)}</div>`).join(''))
+ +sec('Achievements',ul(S.ach.map(x=>x.v).filter(Boolean)))+sec('Certifications & Honors',ul(S.cert.map(x=>x.v).filter(Boolean)))+sec('Languages',ul(S.lang.map(x=>x.v).filter(Boolean)));
+}
+const VERB=/^(built|led|reduced|increased|created|designed|developed|launched|improved|managed|mentored|delivered|implemented|optimized|automated|migrated|shipped|analyzed|owned|drove|wrote|cut|grew|trained|streamlined|partnered|cleaned|trained|collaborated|achieved|generated|established|coordinated|conducted|membangun|memimpin|mengurangi|meningkatkan|merancang|mengembangkan|mengelola)/i;
+const STOP=new Set('the and for with that this from will have your you are our their who can able work working team about such into more also been being they them its not but all any new use using years year experience skills ability strong looking join role responsibilities required requirements preferred plus including etc has was were should must may per via one two dan yang untuk dengan atau dari pada dalam akan kami anda kamu memiliki minimal'.split(' '));
+function kws(x){const m={};(String(x).toLowerCase().match(/[a-z][a-z+#.]{1,}/g)||[]).forEach(w=>{w=w.replace(/\.+$/,'');if(w.length>2&&!STOP.has(w))m[w]=(m[w]||0)+1});return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,25).map(e=>e[0])}
+function checks(){
+ const bl=[...S.exp.flatMap(x=>lines(x.bullets)),...S.proj.flatMap(x=>lines(x.desc))];
+ return [['Mencantumkan nama lengkap','Has full name',S.name.trim().split(/\s+/).filter(Boolean).length>=2],['Memiliki email valid','Has valid email',/^\S+@\S+\.\S+$/.test(S.email.trim())],['Memiliki nomor telepon','Has phone number',S.phone.replace(/\D/g,'').length>=8],['Ada LinkedIn / portfolio / GitHub','Has LinkedIn / portfolio / GitHub',(S.li+S.gh+S.web).trim().length>0],['Ada ringkasan (40+ karakter)','Has summary (40+ chars)',S.summary.trim().length>=40],['Ada pengalaman atau proyek','Has experience or projects',has(S.exp,'role')||has(S.proj,'name')],['Ada pendidikan','Has education',has(S.edu,'school')||has(S.edu,'deg')],['Mencantumkan keahlian','Lists skills',has(S.skills,'list')],['Minimal 3 poin pencapaian','At least 3 achievement bullets',bl.length>=3],['Poin diawali kata kerja aksi','Bullets start with action verbs',bl.length>0&&bl.filter(b=>VERB.test(b)).length/bl.length>=.6],['Menunjukkan dampak dengan angka','Shows impact with numbers',bl.some(b=>/\d/.test(b))],['Poin ringkas (tidak bertele-tele)','Concise bullets (not wordy)',bl.length>0&&bl.every(b=>b.length<=200)]];
+}
+function ats(){
+ const ck=checks(),fmt=Math.round(ck.filter(c=>c[2]).length/ck.length*100);
+ const hasJD=S.jd.trim().length>40;let hit=[],miss=[],km=null;
+ if(hasJD){const all=JSON.stringify(S).toLowerCase().replace(/"jd":".*?",/,'');kws(S.jd).forEach(k=>(all.includes(k)?hit:miss).push(k));km=Math.round(hit.length/Math.max(hit.length+miss.length,1)*100)}
+ const tot=km==null?fmt:Math.round(fmt*.6+km*.4),col=tot>=80?'var(--ok)':tot>=55?'#d97706':'var(--bad)',R=46,C=2*Math.PI*R;
+ const sug=ck.filter(c=>!c[2]).map(c=>'&bull; '+t('Perbaiki: ','Fix: ')+E(t(c[0],c[1])));
+ if(miss.length)sug.push('&bull; '+t('Tambahkan kata kunci yang belum ada: ','Add missing keywords: ')+E(miss.slice(0,8).join(', ')));
+ if(!sug.length)sug.push('&bull; '+t('Sudah kuat. Tiru frasa persis dari lowongan untuk hasil parsing terbaik.','Looking strong. Mirror exact phrases from the posting for best parsing.'));
+ $('#res').innerHTML=`<div class="card pad"><div class="sc"><div class="ring"><svg viewBox="0 0 110 110" width="110" height="110"><circle cx="55" cy="55" r="${R}" fill="none" stroke="var(--line)" stroke-width="9"/><circle cx="55" cy="55" r="${R}" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C*tot/100} ${C}" transform="rotate(-90 55 55)"/></svg><b style="color:${col}">${tot}</b></div><div style="flex:1"><div style="background:var(--bg);border-radius:8px;padding:8px 10px;color:var(--mut);margin-bottom:10px">${hasJD?t('Kecocokan dihitung dari '+(hit.length+miss.length)+' kata kunci lowongan.','Match is based on '+(hit.length+miss.length)+' keywords from the posting.'):t('Tambahkan deskripsi pekerjaan di atas untuk menilai kecocokan.','Add a job description above to score the match.')}</div>${hasJD?`<div class="bl"><span>${t('Kecocokan kata kunci','Keyword match')}</span><span>${km}%</span></div><div class="bar"><i style="width:${km}%"></i></div>`:''}<div class="bl"><span>${t('Format & konten','Format & content')}</span><span>${fmt}%</span></div><div class="bar"><i style="width:${fmt}%"></i></div></div></div></div>
+ ${hasJD?`<div class="card pad"><b>${t('Kata kunci','Keywords')}</b><div style="margin-top:8px">${hit.map(k=>`<span class="kw">${E(k)}</span>`).join('')}${miss.map(k=>`<span class="kw x">${E(k)}</span>`).join('')}</div></div>`:''}
+ <div class="card pad"><b>${t('Daftar periksa konten','Content checklist')}</b><ul class="ck" style="margin-top:10px">${ck.map(c=>`<li class="${c[2]?'':'x'}">${E(t(c[0],c[1]))}</li>`).join('')}</ul></div><div class="card pad"><b>${t('Saran','Suggestions')}</b><div style="margin-top:6px;color:var(--mut)">${sug.join('<br>')}</div></div>`;
+}
+function fit(){const st=$('#stage'),p=$('#paper');if(!st)return;const s=Math.min(1,(st.clientWidth-36)/794);p.style.transform=`scale(${s})`;p.style.margin='18px';st.style.height=(p.offsetHeight*s+36)+'px'}
+function paint(){const p=$('#paper');if(!p)return;p.className=S.tpl;p.style.setProperty('--a',S.acc);p.style.fontSize=({classic:13,modern:12.5,compact:11.5}[S.tpl]*S.fs/100)+'px';p.innerHTML=paperHTML();if($('#res'))ats();fit()}
+const TX=s=>String(s||'').replace(/\\/g,'\\textbackslash{}').replace(/[&%$#_{}]/g,m=>'\\'+m).replace(/~/g,'\\textasciitilde{}').replace(/\^/g,'\\textasciicircum{}');
+const items=a=>a.length?`\\begin{itemize}\n${a.map(b=>'\\item '+TX(b)).join('\n')}\n\\end{itemize}\n`:'';
+function latex(){
+ const sc=(h,b)=>b?`\\section*{${h}}\n${b}\n`:'';
+ return `\\documentclass[11pt,a4paper]{article}\n\\usepackage[margin=0.75in]{geometry}\n\\usepackage[T1]{fontenc}\n\\usepackage{enumitem,titlesec,hyperref}\n\\pagestyle{empty}\n\\titleformat{\\section}{\\large\\bfseries\\scshape}{}{0em}{}[\\titlerule]\n\\titlespacing*{\\section}{0pt}{10pt}{5pt}\n\\setlist[itemize]{leftmargin=*,itemsep=0pt,topsep=2pt}\n\\begin{document}\n\\begin{center}\n{\\LARGE\\bfseries ${TX(S.name||'Your Name')}}\\\\[2pt]\n${S.title?TX(S.title)+'\\\\[2pt]\n':''}${[S.phone,S.email,S.loc,S.li,S.gh,S.web].filter(x=>x&&x.trim()).map(TX).join(' $|$ ')}\n\\end{center}\n`
+ +sc('Summary',TX(S.summary))
+ +sc('Professional Experience',S.exp.filter(x=>x.role||x.org).map(x=>`\\textbf{${TX(x.role)}} \\hfill ${TX(x.dates)}\\\\\n\\textit{${TX(x.org)}} \\hfill \\textit{${TX(x.loc)}}\n${items(lines(x.bullets))}`).join('\n'))
+ +sc('Education',S.edu.filter(x=>x.deg||x.school).map(x=>`\\textbf{${TX(x.deg)}} \\hfill ${TX(x.dates)}\\\\\n\\textit{${TX(x.school)}${x.gpa?' | GPA: '+TX(x.gpa):''}} \\hfill \\textit{${TX(x.loc)}}\n${items(lines(x.detail))}`).join('\n'))
+ +sc('Projects',S.proj.filter(x=>x.name).map(x=>`\\textbf{${TX(x.name)}}${x.tech?' | \\textit{'+TX(x.tech)+'}':''} \\hfill ${TX(x.year)}\n${items(lines(x.desc))}`).join('\n'))
+ +sc('Technical Skills',S.skills.filter(x=>x.list).map(x=>`${x.cat?'\\textbf{'+TX(x.cat)+':} ':''}${TX(x.list)}\\\\`).join('\n'))
+ +sc('Achievements',items(S.ach.map(x=>x.v).filter(Boolean)))+sc('Certifications \\& Honors',items(S.cert.map(x=>x.v).filter(Boolean)))+sc('Languages',items(S.lang.map(x=>x.v).filter(Boolean)))+'\\end{document}\n';
+}
+function toast(m){const e=$('#toast');e.textContent=m;e.style.opacity=1;clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.opacity=0,2600)}
+function dlg(title,text,ro,btn,fn){const d=$('#dlg');d.innerHTML=`<h2 style="margin-top:0;font-size:17px">${title}</h2><textarea id="dt" ${ro?'readonly':''}>${E(text)}</textarea><div class="tl" style="margin-bottom:0"><button class="pri" id="dok">${btn}</button><button id="dno">${t('Tutup','Close')}</button></div>`;$('#dok').onclick=()=>fn($('#dt').value);$('#dno').onclick=()=>d.close();d.showModal()}
+async function copy(x){try{await navigator.clipboard.writeText(x)}catch(e){const a=document.createElement('textarea');a.value=x;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}toast(t('Tersalin ke clipboard','Copied to clipboard'))}
+function dlfile(n,x){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([x],{type:'text/plain'}));a.download=n;document.body.appendChild(a);a.click();a.remove()}catch(e){}toast(t('Jika file tidak terunduh, gunakan Salin LaTeX.','If the file does not download, use Copy LaTeX.'))}
+function touch(){save();const b=$('#saved');if(b)b.innerHTML='&#10003; '+t('Tersimpan','Saved');paint()}
+document.addEventListener('input',e=>{const d=e.target.dataset,id=e.target.id;
+ if(d.k)S[d.k]=e.target.value;else if(d.l)S[d.l][d.i][d.f]=e.target.value;else if(id==='jd')S.jd=e.target.value;
+ else if(id==='fs'){S.fs=+e.target.value;$('#fsv').textContent=S.fs+'%'}else if(id==='cc'){S.acc=e.target.value}else return;touch()});
+document.addEventListener('change',e=>{if(e.target.id==='cc'){ui()}});
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+ if(d.tab){S.tab=d.tab;save();ui()}
+ else if(d.lang){S.L=d.lang;save();ui()}
+ else if(d.dark){S.dark=!S.dark;save();ui()}
+ else if(d.add){S[d.add].push({});save();ui()}
+ else if(d.del){S[d.del].splice(+d.i,1);if(!S[d.del].length)S[d.del].push({});save();ui()}
+ else if(d.mv){const a=S[d.mv],i=+d.i,j=i+ +d.d;if(a[j]){[a[i],a[j]]=[a[j],a[i]];save();ui()}}
+ else if(d.tpl){S.tpl=d.tpl;save();ui()}
+ else if(d.acc){S.acc=d.acc;save();ui()}
+ else if(d.fs){S.fs=Math.max(80,Math.min(120,S.fs+ +d.fs));save();ui()}
+ else if(d.act==='sample'){Object.assign(S,JSON.parse(JSON.stringify(SAMPLE)));save();ui()}
+ else if(d.act==='clear'){if(confirm(t('Hapus semua data CV?','Clear all CV data?'))){const k={tpl:S.tpl,acc:S.acc,fs:S.fs,L:S.L,tab:S.tab,dark:S.dark};S=Object.assign(BLANK(),k);save();ui()}}
+ else if(d.act==='exp')dlg(t('Ekspor data','Export data'),JSON.stringify(S,null,1),true,t('Salin JSON','Copy JSON'),copy);
+ else if(d.act==='imp')dlg(t('Impor data','Import data'),'',false,t('Terapkan','Apply'),x=>{try{S=Object.assign(BLANK(),JSON.parse(x));save();$('#dlg').close();ui()}catch(err){toast(t('JSON tidak valid','Invalid JSON'))}});
+ else if(d.act==='pdf')window.print();
+ else if(d.act==='ctex')copy(latex());
+ else if(d.act==='dtex')dlfile((S.name||'cv').trim().replace(/\s+/g,'_')+'.tex',latex());
+});
+addEventListener('resize',fit);
+ui();
+</script>
+</body>
+</html>
