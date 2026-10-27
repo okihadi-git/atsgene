@@ -1,0 +1,11 @@
+@tailwind base;@tailwind components;@tailwind utilities;
+:root{--bg:#e8eef0;--card:#fff;--line:#d3dde1;--ink:#10212b;--mut:#587080;--pri:#0b7a75;--pbt:#fff;--hd:#0c2f36;--ok:#0b7a4b;--okb:#d6f2e4;--bad:#c0392b}
+.dark{--bg:#0a1418;--card:#112027;--line:#223a44;--ink:#e3eef1;--mut:#8fa9b4;--pri:#3dc4bb;--pbt:#06201f;--hd:#071e24;--okb:#0f3a2c}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14.5px}
+@layer components{
+.card{@apply rounded-md border p-4 mb-4;background:var(--card);border-color:var(--line);border-left:4px solid var(--pri)}
+.inp{@apply w-full rounded px-2.5 py-2 border text-sm;background:var(--card);border-color:var(--line);color:var(--ink)}
+.lab{@apply block text-xs mb-1;color:var(--mut)}
+.btn{@apply rounded-full border px-3.5 py-1.5 text-sm cursor-pointer;border-color:var(--line);background:var(--card);color:var(--ink)}
+.btn-pri{background:var(--pri)!important;color:var(--pbt)!important;border-color:var(--pri)!important;font-weight:600}
+.ghost{@apply text-sm px-2 py-1 cursor-pointer;color:var(--mut)}}
