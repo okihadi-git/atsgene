@@ -1,23 +1,27 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import ResumeDocument from './pdf/ResumeDocument'; // File dokumen PDF kamu
+import { ResumeDocument } from './pdf/ResumeDocument';
+import type { Resume, Settings } from '@/lib/types';
 
-// Dynamic import agar PDFViewer hanya dirender di client-side (mencegah error SSR)
+// Dynamic import PDFViewer agar hanya berjalan di Client Side
 const PDFViewer = dynamic(
   () => import('@react-pdf/renderer').then((mod) => mod.PDFViewer),
   {
     ssr: false,
-    loading: () => <div className="p-8 text-center text-gray-500">Memuat PDF Viewer...</div>,
+    loading: () => (
+      <div className="flex h-[600px] w-full items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+        Memuat PDF Viewer...
+      </div>
+    ),
   }
 );
 
-export default function Preview({ data }: { data: any }) {
+export default function Preview({ resume, settings }: { resume: Resume; settings: Settings }) {
   return (
-    <div className="w-full h-[calc(100vh-100px)] sticky top-4">
-      {/* Menggantikan <div id="paper"> dengan PDFViewer bawaan @react-pdf/renderer */}
-      <PDFViewer className="w-full h-full rounded-lg border border-gray-200 shadow-md">
-        <ResumeDocument data={data} />
+    <div className="sticky top-4 h-[calc(100vh-100px)] w-full overflow-hidden rounded-lg border border-slate-200 shadow-md">
+      <PDFViewer className="h-full w-full border-0">
+        <ResumeDocument r={resume} s={settings} />
       </PDFViewer>
     </div>
   );
