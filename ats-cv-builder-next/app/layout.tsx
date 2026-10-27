@@ -13,33 +13,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
 
-        {/* SCRIPT RESMI TRAKTEER TIP OVERLAY */}
+        {/* Script pendukung overlay Trakteer */}
         <Script
           src="https://edge-cdn.trakteer.id/js/trbtn-overlay.min.js?v=14-05-2025"
           strategy="afterInteractive"
         />
-        <Script id="trakteer-overlay-init" strategy="afterInteractive">
-          {`
-            (function() {
-              function initTrakteer() {
-                if (window.trbtnOverlay) {
-                  var trbtnId = trbtnOverlay.init(
-                    'Traktir untuk beli Laptop',
-                    '#00BCD4',
-                    'https://trakteer.id/v1/okihadi/tip/embed/modal',
-                    'https://trakteer.id/images/mix/coffee.png',
-                    '40',
-                    'floating-right'
-                  );
-                  trbtnOverlay.draw(trbtnId);
-                } else {
-                  setTimeout(initTrakteer, 200);
-                }
-              }
-              initTrakteer();
-            })();
-          `}
-        </Script>
       </body>
     </html>
   );
