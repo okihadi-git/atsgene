@@ -5,7 +5,7 @@ import { useT } from "@/lib/store";
 
 const WAIT = 5; // detik hitung mundur untuk jalur gratis
 const GRACE = 10 * 60 * 1000; // setelah lolos sekali, tidak ditanya lagi selama 10 menit
-export const TRAKTEER_URL = "https://trakteer.id/okihadi/tip";
+export const TRAKTEER_URL = "https://trakteer.id/okihadi/tip?quantity=1";
 
 type Act = () => void | Promise<void>;
 interface S { pending: Act | null; until: number; ask: (a: Act) => void; close: () => void; done: () => void }
@@ -18,13 +18,7 @@ export const useSupport = create<S>((set, get) => ({
   done: () => { const a = get().pending; set({ pending: null, until: Date.now() + GRACE }); a?.(); },
 }));
 
-function openTrakteer() {
-  const w = window as any;
-  if (w.trbtnOverlay) {
-    const id = w.trbtnOverlay.init("Traktir untuk beli Laptop", "#00BCD4", "https://trakteer.id/v1/okihadi/tip/embed/modal", "https://trakteer.id/images/mix/coffee.png", "40", "inline");
-    w.trbtnOverlay.draw(id);
-  } else window.open(TRAKTEER_URL, "_blank", "noopener,noreferrer");
-}
+function openTrakteer() { window.open(TRAKTEER_URL, "_blank", "noopener,noreferrer"); }
 
 export default function SupportModal() {
   const t = useT();
@@ -34,8 +28,12 @@ export default function SupportModal() {
 
   useEffect(() => {
     if (!pending) return;
+    let n = WAIT;
     setSec(WAIT); setShared(false);
-    const h = setInterval(() => setSec((s) => Math.max(0, s - 1)), 1000);
+    const h = setInterval(() => {
+      n -= 1; setSec(n);
+      if (n <= 0) { clearInterval(h); useSupport.getState().done(); } // tutup otomatis + unduh
+    }, 1000);
     const k = (e: KeyboardEvent) => e.key === "Escape" && useSupport.getState().close();
     window.addEventListener("keydown", k);
     return () => { clearInterval(h); window.removeEventListener("keydown", k); };
@@ -44,13 +42,14 @@ export default function SupportModal() {
   if (!pending) return null;
   const { done, close } = useSupport.getState();
 
-  const tip = () => { done(); openTrakteer(); }; // file langsung terunduh + jendela traktir terbuka
+  const tip = () => { openTrakteer(); done(); }; // tab traktir terbuka, file langsung terunduh
   const share = async () => {
     const data = { title: "ATS CV Builder", text: t("Bikin CV ramah ATS gratis di sini:", "Build a free ATS-friendly CV here:"), url: location.origin };
     try {
       if (navigator.share) await navigator.share(data);
       else await navigator.clipboard.writeText(location.origin);
-      setShared(true); setSec(0);
+      setShared(true);
+      setTimeout(() => useSupport.getState().done(), 800);
     } catch { /* dibatalkan pengguna */ }
   };
 

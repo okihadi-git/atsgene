@@ -22,7 +22,7 @@ export default function Preview() {
       <div className="flex flex-wrap items-center gap-2">
         <button className="btn btn-pri disabled:opacity-50" disabled={!inst.url} onClick={() => inst.url && ask(() => dl(inst.url!, `${base}.pdf`))}>{t("Unduh PDF", "Download PDF")}</button>
         <button className="btn" onClick={() => ask(() => { const u = URL.createObjectURL(new Blob([toLatex(resume)], { type: "text/plain" })); dl(u, `${base}.tex`); setTimeout(() => URL.revokeObjectURL(u), 1000); })}>{t("Unduh .tex", "Download .tex")}</button>
-        <button className="btn" onClick={() => ask(async () => { await navigator.clipboard.writeText(toLatex(resume)); setCopied(true); setTimeout(() => setCopied(false), 1500); })}>{copied ? t("Tersalin", "Copied") : t("Salin LaTeX", "Copy LaTeX")}</button>
+        <button className="btn" onClick={() => ask(async () => { const tx = toLatex(resume); try { await navigator.clipboard.writeText(tx); } catch { const el = document.createElement("textarea"); el.value = tx; document.body.appendChild(el); el.select(); document.execCommand("copy"); el.remove(); } setCopied(true); setTimeout(() => setCopied(false), 1500); })}>{copied ? t("Tersalin", "Copied") : t("Salin LaTeX", "Copy LaTeX")}</button>
         <span className="text-xs" style={{ color: "var(--mut)" }}>{inst.loading ? t("Merender...", "Rendering...") : t("Pratinjau PDF asli, teks bisa diseleksi", "Real PDF preview, selectable text")}</span>
       </div>
       <div className="min-h-[560px] flex-1 overflow-hidden rounded-md" style={{ background: "#9fb3ba" }}>
