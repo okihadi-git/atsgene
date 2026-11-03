@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useStore, useT } from "@/lib/store";
 import Editor from "./Editor";
+import SupportModal, { useSupport } from "./SupportModal";
 import { DesignPanel, AtsPanel } from "./Panels";
 const Preview = dynamic(() => import("./Preview"), { ssr: false });
 
@@ -12,47 +13,23 @@ export default function App() {
   const file = useRef<HTMLInputElement>(null);
   useEffect(() => { document.documentElement.classList.toggle("dark", dark); }, [dark]);
   if (!ok) return null;
-  const exportJson = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(resume, null, 1)], { type: "application/json" })); a.download = "cv-data.json"; a.click(); };
+  const exportJson = () => useSupport.getState().ask(() => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(resume, null, 1)], { type: "application/json" })); a.download = "cv-data.json"; a.click(); });
   const importJson = async (f?: File) => { if (!f) return; try { load(JSON.parse(await f.text())); } catch { alert(t("JSON tidak valid", "Invalid JSON")); } };
   const tabs: [typeof tab, string][] = [["edit", "Editor"], ["design", t("Desain", "Design")], ["ats", t("Cek ATS", "ATS check")]];
   return (<>
-    <header className="flex items-center gap-3 px-6 py-3.5 text-white" style={{ background: "var(--hd)" }}>
-  <div className="grid h-9 w-9 place-items-center text-xs font-bold" style={{ background: "#fff", color: "var(--hd)", borderRadius: "50% 50% 50% 4px" }}>CV</div>
-  <div>
-    <h1 className="text-xl font-bold">ATS CV Builder</h1>
-    <p className="text-xs opacity-70">{t("Buat CV rapi yang ramah ATS dalam hitungan menit.", "Build a clean, ATS-friendly CV in minutes.")}</p>
-  </div>
-  <span className="flex-1" />
-
-  {/* TOMBOL TRAKTEER POP-UP OVERLAY */}
-  <a
-    href="https://trakteer.id/okihadi/tip"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center gap-1.5 rounded-full bg-amber-400 px-3.5 py-1 text-xs font-bold text-slate-900 transition hover:bg-amber-300"
-    onClick={(e) => {
-      if ((window as any).trbtnOverlay) {
-        e.preventDefault();
-        var trbtnId = (window as any).trbtnOverlay.init(
-          'Traktir untuk beli Laptop',
-          '#00BCD4',
-          'https://trakteer.id/v1/okihadi/tip/embed/modal',
-          'https://trakteer.id/images/mix/coffee.png',
-          '40',
-          'inline'
-        );
-        (window as any).trbtnOverlay.draw(trbtnId);
-      }
-    }}
-  >
-    ☕ Traktir Kopi / QRIS
-  </a>
-
-  <button className="rounded-full border border-white/40 px-3 py-1 text-sm" onClick={() => patch({ dark: !dark })}>{dark ? "☀" : "☾"}</button>
-  {(["id", "en"] as const).map((l) => (
-    <button key={l} onClick={() => patch({ lang: l })} className="rounded-full border border-white/40 px-3 py-1 text-sm" style={lang === l ? { background: "#fff", color: "var(--hd)" } : {}}>{l.toUpperCase()}</button>
-  ))}
-</header>
+    <header className="flex items-center gap-3 px-4 py-3 text-white sm:px-6 sm:py-3.5" style={{ background: "var(--hd)" }}>
+      <div className="grid h-9 w-9 shrink-0 place-items-center text-xs font-bold" style={{ background: "#fff", color: "var(--hd)", borderRadius: "50% 50% 50% 4px" }}>CV</div>
+      <div className="min-w-0 flex-1">
+        <h1 className="truncate text-lg font-bold sm:text-xl">ATS CV Builder</h1>
+        <p className="hidden text-xs opacity-70 sm:block">{t("Buat CV rapi yang ramah ATS dalam hitungan menit.", "Build a clean, ATS-friendly CV in minutes.")}</p>
+      </div>
+      <div className="flex shrink-0 items-center gap-1.5">
+        <button className="rounded-full border border-white/40 px-3 py-1 text-sm" onClick={() => patch({ dark: !dark })}>{dark ? "☀" : "☾"}</button>
+        {(["id", "en"] as const).map((l) => (
+          <button key={l} onClick={() => patch({ lang: l })} className="rounded-full border border-white/40 px-3 py-1 text-sm" style={lang === l ? { background: "#fff", color: "var(--hd)" } : {}}>{l.toUpperCase()}</button>
+        ))}
+      </div>
+    </header>
     <main className="mx-auto grid max-w-[1500px] gap-5 p-5 lg:grid-cols-[minmax(340px,560px)_1fr]">
       <section>
         <div className="mb-3 flex gap-6 border-b-2" style={{ borderColor: "var(--line)" }}>{tabs.map(([k, l]) => <button key={k} onClick={() => patch({ tab: k })} className="-mb-0.5 border-b-4 px-0.5 py-2 font-semibold" style={{ borderColor: tab === k ? "var(--pri)" : "transparent", color: tab === k ? "var(--ink)" : "var(--mut)" }}>{l}</button>)}</div>
@@ -60,5 +37,6 @@ export default function App() {
         {tab === "edit" ? <Editor /> : tab === "design" ? <DesignPanel /> : <AtsPanel />}
       </section>
       <section className="lg:sticky lg:top-3 lg:h-[calc(100vh-24px)]"><Preview /></section>
-    </main></>);
+    </main>
+    <SupportModal /></>);
 }
